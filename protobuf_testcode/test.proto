@@ -1,0 +1,16 @@
+syntax = "proto3";
+package WeChatPro;
+
+message Login_Head
+{
+    sfixed32 data_size  = 1;
+    string username     = 2;
+    string password     = 3;
+}
+
+message Reply_Login
+{
+    sfixed32 data_size  = 1;
+    bool res            = 2;
+}
+
