@@ -1,9 +1,3 @@
-/*************************************************************************
-	> File Name: client.c
-	> Author: wang
-	> Mail: dhkhl235@gmail.com
-	> Created Time: 2018年03月29日 星期四 15时58分24秒
- ************************************************************************/
 #include <stdio.h>
 #include <netdb.h>
 #include <stdlib.h>
@@ -60,25 +54,9 @@ int main()
     {
         perror("sendto cli");
     }
-    while(1)
-    {
-        printf("数据将在5s后发送\n");
-        if ( (len = sendto(confd, "send", 4, 0, (struct sockaddr *)&msg.peeraddr, sizeof(serveraddr))) < 0)
-        {
-            printf("send error\n");
-            exit(1);
-        }
-        else
-            printf("已经发送\n");
-        char buff[1024];
-        memset(buff, 0, sizeof(buff));
-        recvfrom(confd, buff, sizeof(buff), 0, (struct sockaddr*)&msg.peeraddr, &len);
-        printf("recv : %s\n", buff);
-        sleep(2);
-    }
 
-    /*
-    while(0)
+    int sfd = confd;
+    while(1)
     {
 
         char sendbuf[1024];
@@ -120,6 +98,7 @@ int main()
                 else
                 {
                     puts(recvbuf);
+                    fflush(stdout);
                 }
                 memset(recvbuf, 0, sizeof(recvbuf));
             }
@@ -127,15 +106,18 @@ int main()
             if(FD_ISSET(fd_stdin, &rset))
             {
                 fgets(sendbuf, sizeof(sendbuf), stdin);
-                if(send(sfd, sendbuf, strlen(sendbuf), 0) == -1)
+                if(sendto(sfd, sendbuf, strlen(sendbuf),0,(struct sockaddr *)&msg.peeraddr
+                          ,sizeof(msg.peeraddr)) == -1)
                 {
                     perror("send");
                 }
+                else
+                    printf("发送成功\n");
                 memset(sendbuf, 0, sizeof(sendbuf));
             }
         }
 
-    }*/
+    }
     close(confd);
     return 0;
 }
